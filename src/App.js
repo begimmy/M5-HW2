@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
-function App() {
+const App = () => {
+const [input, setInput] = useState('');
+const [names, setNames] = useState(JSON.parse(localStorage.getItem('names')) || []);
+
+const inputChange = (event) => {
+  setInput(event.target.value);
+};
+
+const buttonClick = () => {
+  if (input) {
+    const updatedNames = [...names, input];
+    setNames(updatedNames);
+    setInput('');
+    localStorage.setItem('names', JSON.stringify(updatedNames));
+  }
+};
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <input type="text" value={input} onChange={inputChange} />
+      <button onClick={buttonClick}>Add</button>
+      <ul>
+        {names.map((name, index) => (
+          <li key={index}>{name}</li>
+        ))}
+      </ul>
     </div>
   );
-}
 
+}
 export default App;
